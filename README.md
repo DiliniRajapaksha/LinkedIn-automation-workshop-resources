@@ -27,7 +27,7 @@ Idea → Notion → AI Draft → Review → Schedule → Auto-Post → Done
 - (Optional) Add an image  
 - Pick a **Schedule Date** and set status to `Scheduled`
 
-### 3. **Auto-Publishing (Daily at 6 AM)**
+### 3. **Auto-Publishing daily**
 - `LinkedIn_Poster_with_image.json` or `LinkedIn_Poster_text_only.json` runs  
 - Posts **only today’s scheduled content**  
 - Updates Notion: `Scheduled` → `Posted` + timestamp
