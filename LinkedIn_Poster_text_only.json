@@ -1,0 +1,279 @@
+{
+  "name": "LinkedIn Poster -no image",
+  "nodes": [
+    {
+      "parameters": {
+        "resource": "databasePage",
+        "operation": "getAll",
+        "databaseId": {
+          "__rl": true,
+          "value": "29fe97b3-9326-81bc-ad30-d80a82f2f146",
+          "mode": "list",
+          "cachedResultName": "LinkedIn Content Database",
+          "cachedResultUrl": "https://www.notion.so/29fe97b3932681bcad30d80a82f2f146"
+        },
+        "returnAll": true,
+        "filterType": "manual",
+        "filters": {
+          "conditions": [
+            {
+              "key": "Status|status",
+              "condition": "equals",
+              "statusValue": "Scheduled"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [
+        -352,
+        256
+      ],
+      "id": "bfb4fd3a-9356-42e3-b7ed-12e6b777c9b8",
+      "name": "Notion",
+      "credentials": {
+        "notionApi": {
+          "id": "hF5aj9kcQrquieAr",
+          "name": "Notion account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 6
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -576,
+        256
+      ],
+      "id": "4e2edd19-b20a-4723-8b1e-6f2ecb55882e",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "person": "=",
+        "text": "={{ $('Set values').item.json.post_content }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.linkedIn",
+      "typeVersion": 1,
+      "position": [
+        320,
+        256
+      ],
+      "id": "9736489a-216f-4253-b03c-fe6514a840a1",
+      "name": "Create text post",
+      "credentials": {
+        "linkedInOAuth2Api": {
+          "id": "feW55vdn09XCnxrE",
+          "name": "LinkedIn account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "databasePage",
+        "operation": "update",
+        "pageId": {
+          "__rl": true,
+          "value": "={{ $('Set values').item.json.id }}",
+          "mode": "id"
+        },
+        "propertiesUi": {
+          "propertyValues": [
+            {
+              "key": "Publication Date|date",
+              "date": "={{ $now }}"
+            },
+            {
+              "key": "Status|status",
+              "statusValue": "Posted"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [
+        544,
+        256
+      ],
+      "id": "aa4dc640-15ae-4ecc-9288-19cea50c5465",
+      "name": "Update record",
+      "credentials": {
+        "notionApi": {
+          "id": "hF5aj9kcQrquieAr",
+          "name": "Notion account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c035927f-6619-4d9f-9204-0e8a45312614",
+              "name": "post_content",
+              "value": "={{ $json.property_linked_in_post }}",
+              "type": "string"
+            },
+            {
+              "id": "0afa674a-cf3f-453b-8a14-6277c4e9cb71",
+              "name": "property_image",
+              "value": "={{ $json.property_image }}",
+              "type": "array"
+            },
+            {
+              "id": "12f9cced-85a3-4557-a489-722abf2977b8",
+              "name": "id",
+              "value": "={{ $('Notion').item.json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        96,
+        256
+      ],
+      "id": "acf4df0e-2e2b-43a8-b13d-b0d960c3b590",
+      "name": "Set values"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "ff739a7a-49a9-43dc-8851-8af95d473fe5",
+              "leftValue": "={{ $json.property_schedule_date.start }}",
+              "rightValue": "={{ $today.format('yyyy-MM-dd') }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        -128,
+        256
+      ],
+      "id": "18e0e35d-ccbd-4500-a26c-543bbe9a83b8",
+      "name": "Date filter"
+    }
+  ],
+  "pinData": {
+    "Schedule Trigger": [
+      {
+        "json": {
+          "timestamp": "2025-09-04T13:52:47.543+10:00",
+          "Readable date": "September 4th 2025, 1:52:47 pm",
+          "Readable time": "1:52:47 pm",
+          "Day of week": "Thursday",
+          "Year": "2025",
+          "Month": "September",
+          "Day of month": "04",
+          "Hour": "13",
+          "Minute": "52",
+          "Second": "47",
+          "Timezone": "Australia/Brisbane (UTC+10:00)"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Notion": {
+      "main": [
+        [
+          {
+            "node": "Date filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Notion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create text post": {
+      "main": [
+        [
+          {
+            "node": "Update record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set values": {
+      "main": [
+        [
+          {
+            "node": "Create text post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Date filter": {
+      "main": [
+        [
+          {
+            "node": "Set values",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "c0abb032-4dab-49db-92bb-4d9133a4107c",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "3b62a3adc0717f0dc14e1bf312e8ab828ddba7f0d8915a211032bc326f8d708a"
+  },
+  "id": "smO3TqIWs9RTqEtO",
+  "tags": []
+}
