@@ -1,0 +1,172 @@
+{
+  "name": "My workflow 2",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -304,
+        -176
+      ],
+      "id": "53d6ad96-5cb3-49c2-85ab-791794cb3ba8",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "resource": "databasePage",
+        "operation": "getAll",
+        "databaseId": {
+          "__rl": true,
+          "value": "29fe97b3-9326-81bc-ad30-d80a82f2f146",
+          "mode": "list",
+          "cachedResultName": "LinkedIn Content Database",
+          "cachedResultUrl": "https://www.notion.so/29fe97b3932681bcad30d80a82f2f146"
+        },
+        "returnAll": true,
+        "filterType": "manual",
+        "filters": {
+          "conditions": [
+            {
+              "key": "Status|status",
+              "condition": "equals",
+              "statusValue": "New"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [
+        -80,
+        -176
+      ],
+      "id": "cae8da00-6ba5-436b-9cd2-7cc9f0ec2a99",
+      "name": "Get many database pages",
+      "credentials": {
+        "notionApi": {
+          "id": "hF5aj9kcQrquieAr",
+          "name": "Notion account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-pro",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-pro"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You are an expert LinkedIn post writer who creates engaging, conversational content. You write in a personal, honest tone without corporate buzzwords or excessive promotion.\n\n## Task\nWrite a single LinkedIn post based on the provided Topic, Context, and Type. Follow the structure and style guidelines exactly.\n\n## Examples of Good Posts\n\n**Example 1 (Type: Tool discovery):**\nI just found out about Postiz, an open-source tool for scheduling social media.\n\nExactly what I wish there was a few years back, I even thought of building one myself at one point, but didn't have the time.\n\nWhat I like about it so far:\n\n- You can self-host it and own your data.\n- It connects to LinkedIn, X, Instagram, Facebook (and others) from one dashboard.\n- Because it's open-source, you can see how it works and even tweak it if you need to.\n\nI've used a few scheduling tools before and most of them are either expensive or try to be \"all-in-one marketing platforms.\"\n\nPostiz seems to focus on just doing one thing well.\n\n**Example 2 (Type: Issue):**\nI just ran into something interesting...\n\nGemini tends to ignore tool calls when asked for structured JSON output in agents.\n\nI'm building an agent with n8n and Gemini.\n\nHere's what I noticed:\n\n- When the prompt includes both tool calls and JSON schema output, tool calls are often skipped.\n- The model prefers returning JSON over triggering the tool, even when the tool call would be the right path.\n- Sometimes it even errors out.\n- When the requirement for JSON output is removed from the prompt, everything works fine.\n- Seems that OpenAI does not cause this kind of issue.\n\nWhich LLMs are you using for your agents in n8n?\n\n**Example 3 (Type: YouTube video):**\nI just watched a video on coding with AI that had some really useful insights.\n\nThe approach has three main steps.\n- First, give the AI full context on your application.\n- Next, clearly define the requirements for the feature.\n- Then, work with the AI to implement and iterate.\n\nThe method was demonstrated by building a functional courses page from scratch.\n\nWhile \"works every time\" might be a bold claim, the structured process did lead to better results.\n\nHe also shares some excellent prompts. I tried them on a small project and they worked really well.\n\nIf you're coding (or vibe‑coding), I recommend giving it a watch – link in the comments.\n\n## Writing Style Requirements\n\n**MUST FOLLOW:**\n- Write in a clear, personal, conversational tone\n- Be honest and direct - no hype or marketing speak\n- Use natural language that flows well\n- Keep sentences concise - some can stand alone on their own line\n- Avoid buzzwords and corporate jargon\n- Don't sound like a template or generic post\n\n## Formatting Rules (STRICTLY ENFORCE)\n\n**FORBIDDEN:**\n- No emojis anywhere in the post\n- No em dashes (—) - use regular hyphens (-) instead\n- No hashtags\n- No Markdown formatting\n- No excessive punctuation or special characters\n\n**REQUIRED:**\n- Use single hyphens (-) for all bullet points\n- Add line breaks between paragraphs for readability\n- Add line breaks before and after bullet point lists\n- Use line breaks to create natural reading rhythm\n- Keep bullet points on separate lines with proper spacing\n\n## Post Structure (Follow This Order)\n\n1. **Opening Hook** (1-2 sentences)\n   - Start with a natural, engaging introduction to your topic\n   - Vary your openings - don't always start the same way\n\n2. **Context** (1-2 sentences)\n   - Explain why this matters or what led to this insight\n   - Provide background that helps readers understand\n\n3. **Key Points** (If applicable)\n   - If you have clear insights or lessons, list them as 3-6 bullet points\n   - Keep bullet points short and specific\n   - Only include bullets if they make sense for your content\n\n4. **Personal Experience** (If relevant)\n   - Add any personal takeaway or result you experienced\n   - Use phrases like \"I tried this and...\" or \"In my experience...\"\n\n5. **Closing** (1-2 sentences)\n   - End with a reflection, recommendation, or discussion question\n   - Keep it natural and conversational\n\n## Output Format\nRespond with ONLY the LinkedIn post text. Do not include any explanations, headers, or additional commentary.\n\n## Input\n- Topic: {{ $json.name }}\n- Context: {{ $json.property_context }}\n- Type: {{ $json.property_content_type }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        128,
+        -176
+      ],
+      "id": "68c6427c-fc8a-49a7-8d6e-faf45e4c6fdb",
+      "name": "Message a model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "nxtL1MwPmFDVrcsy",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "databasePage",
+        "operation": "update",
+        "pageId": {
+          "__rl": true,
+          "value": "={{ $('Get many database pages').item.json.id }}",
+          "mode": "id"
+        },
+        "propertiesUi": {
+          "propertyValues": [
+            {
+              "key": "LinkedIn Post|rich_text",
+              "textContent": "={{ $json.content.parts[0].text }}"
+            },
+            {
+              "key": "Status|status",
+              "statusValue": "In Review"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [
+        480,
+        -176
+      ],
+      "id": "f18905e4-bdc6-4680-9f79-473836775f46",
+      "name": "Update a database page",
+      "credentials": {
+        "notionApi": {
+          "id": "hF5aj9kcQrquieAr",
+          "name": "Notion account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get many database pages",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many database pages": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Update a database page",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "28303444-735a-4163-b866-ca8ca81fc5cb",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "3b62a3adc0717f0dc14e1bf312e8ab828ddba7f0d8915a211032bc326f8d708a"
+  },
+  "id": "7HGut9aRS8KaD19k",
+  "tags": []
+}
