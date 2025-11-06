@@ -47,7 +47,13 @@ Idea → Notion → AI Draft → Review → Schedule → Auto-Post → Done
    - Create a new integration
    - Save the API token
    - Share your database with the integration
-
+  
+### 2. LLM API key 
+Let's use Gemini - it's free and easy to get an API key.
+Go to https://aistudio.google.com and get your API key to be used in the workflow.
+   
+### 3. n8n Setup
+Sign up to [n8n](https://n8n.partnerlinks.io/jzstea86fya1) (Cloud version works perfectly - free tier is fine)
 1. **Import workflows into n8n**  
    → Go to n8n → Workflows → Import → Paste JSON
 
